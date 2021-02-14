@@ -24,6 +24,11 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: homePage")
 }
 
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "go-rest-server is alive!")
+	fmt.Println("Endpoint Hit: healthCheck")
+}
+
 func returnAllArticles(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: returnAllArticles")
 	json.NewEncoder(w).Encode(Articles)
@@ -82,6 +87,7 @@ func handleRequests() {
 	// log.Fatal(http.ListenAndServe(":10000", nil))
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/", homePage)
+	myRouter.HandleFunc("/health", healthCheck)
 	myRouter.HandleFunc("/articles", returnAllArticles)
 	myRouter.HandleFunc("/article", createNewArticle).Methods("POST")
 	myRouter.HandleFunc("/article/{id}", deleteArticle).Methods("DELETE")
